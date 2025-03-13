@@ -1,3 +1,5 @@
+
+
 // Fetch All Pet Categories
 const getCategoriesData = async () => {
     try {
@@ -15,24 +17,36 @@ const displayCategoriesData = (categories) => {
         const allBtn = document.getElementById('all-btn')
         const newDiv = document.createElement('div')
         newDiv.innerHTML = ` 
-        <button onclick="(getSingleCategory('${cat.category}'))" class="flex items-center btn border-2 p-2 md:p-6"><img class="w-5 md:w-8" src="${cat.category_icon}" alt="this is category image"> ${cat.category}</button>
+        <button id="btn-${cat.category}" onclick="(getSingleCategory('${cat.category}'))" class="single-btn flex items-center btn border-2 p-2 md:p-6"><img class="w-5 md:w-8" src="${cat.category_icon}" alt="this is category image"> ${cat.category}</button>
         `
         allBtn.appendChild(newDiv)
     });
 }
 
-
 const getSingleCategory = async (singleData) => {
     try {
         const response = await fetch(`https://openapi.programming-hero.com/api/peddy/category/${singleData}`)
         const data = await response.json()
+        removeActiveClass()
+        const clickedBtn = document.getElementById(`btn-${singleData}`)
+        if (clickedBtn) clickedBtn.classList.add('active')
         displaySingleCategory(data.data);
+
     }
     catch {
-        console.log('Got Error');
+        console.log('Here is an Error');
     }
 }
+
 getSingleCategory('cat')
+
+const removeActiveClass = () => {
+    const removeActive = document.getElementsByClassName('active')
+    for (let btn of removeActive) {
+        btn.classList.remove('active')
+    }
+}
+
 
 const displaySingleCategory = (data) => {
 
